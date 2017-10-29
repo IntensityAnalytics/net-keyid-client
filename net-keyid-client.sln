@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net-keyid-client", "net-keyid-client\net-keyid-client.csproj", "{FEE98930-A083-47E5-AEAE-2D83C9454166}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "net-keyid-client", "net-keyid-client\net-keyid-client.csproj", "{FEE98930-A083-47E5-AEAE-2D83C9454166}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7F2FE614-A56F-4F55-8155-28C545D42414}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net-keyid-client-tests", "net-keyid-client-tests\net-keyid-client-tests.csproj", "{47F47750-54D2-411E-8301-2BE7471E90C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{FEE98930-A083-47E5-AEAE-2D83C9454166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEE98930-A083-47E5-AEAE-2D83C9454166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEE98930-A083-47E5-AEAE-2D83C9454166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47F47750-54D2-411E-8301-2BE7471E90C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F47750-54D2-411E-8301-2BE7471E90C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F47750-54D2-411E-8301-2BE7471E90C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F47750-54D2-411E-8301-2BE7471E90C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

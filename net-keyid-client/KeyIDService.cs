@@ -23,7 +23,7 @@ namespace net_keyid_client
             client = new HttpClient();
         }
 
-        private Task<HttpResponseMessage> Get(string path, JObject data)
+        public Task<HttpResponseMessage> Get(string path, ref JObject data)
         {
             string query = "";
 
@@ -34,7 +34,11 @@ namespace net_keyid_client
 
             UriBuilder request = url;
             request.Path = path;
-            request.Query = query;
+
+            if (query.Length > 1)
+            {
+                request.Query = query.Substring(1);
+            }
 
             return client.GetAsync(request.Uri);
         }
