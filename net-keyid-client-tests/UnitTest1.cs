@@ -20,6 +20,8 @@ namespace net_keyid_client_tests
                 string body = response.Result.Content.ToString();
                 Console.WriteLine(body);
             }).Wait();
+
+            service.Post("/profile", jo).Wait();
         }
     }
 }

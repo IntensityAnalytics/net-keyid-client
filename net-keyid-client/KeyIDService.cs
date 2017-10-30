@@ -41,12 +41,12 @@ namespace net_keyid_client
         {
             data["License"] = license;
             var dataEncoded = encodeJSONProperties(data);
-            string dataEncodedJSON = dataEncoded.ToString();
+            string dataEncodedJSON = dataEncoded.ToString(Formatting.None);
 
             UriBuilder request = url;
             request.Path = path;
 
-            var content = new StringContent("=[" + dataEncodedJSON + "]", Encoding.UTF8, "application/x-www-form-urlencoded");
+            var content = new StringContent("=[" + dataEncodedJSON + "]", Encoding.UTF8,  "application/x-www-form-urlencoded");
 
             return client.PostAsync(request.Uri, content);
         }
@@ -70,6 +70,115 @@ namespace net_keyid_client
             }
 
             return client.GetAsync(request.Uri);
+        }
+
+        public Task<HttpResponseMessage> TypingMistake(string entityID, string mistype, string sessionID, string source, string action, string tmplate, string page)
+        {
+            var data = new JObject();
+            data["EntityID"] = entityID;
+            data["Mistype"] = mistype;
+            data["SessionID"] = sessionID;
+            data["Source"] = source;
+            data["Action"] = action;
+            data["Template"] = tmplate;
+            data["Page"] = page;
+
+            return Post("/typingmistake", data);
+        }
+
+        public Task<HttpResponseMessage> EvaluateSample(string entityID, string tsData, string nonce)
+        {
+            var data = new JObject();
+            data["EntityID"] = entityID;
+            data["tsData"] = tsData;
+            data["Nonce"] = nonce;
+            data["Return"] = "JSON";
+            data["Statistics"] = "extended";
+
+            return Post("/evaluate", data);
+        }
+
+        public Task<HttpResponseMessage> Nonce(ulong nonceTime)
+        {
+            var data = new JObject();
+            data["type"] = "nonce";
+            string path = "/token/" + nonceTime;
+            return Get(path, data);
+        }
+
+        public Task<HttpResponseMessage> RemoveToken(string entityID, string tsData)
+        {
+            var data = new JObject();
+            data["Type"] = "remove";
+            data["Return"] = "value";
+
+            return Get("/token" + entityID, data)
+            .ContinueWith((response) => 
+            {
+                var postData = new JObject();
+                postData["EntityID"] = entityID;
+                postData["Token"] = response.Result.Content.ToString();
+                postData["ReturnToken"] = "True";
+                postData["ReturnValidation"] = tsData;
+                postData["Type"] = "remove";
+                postData["Return"] = "JSON";
+
+                return Post("/token", postData);
+            }).Unwrap();
+        }
+
+        public Task<HttpResponseMessage> RemoveProfile(string entityID, string token)
+        {
+            var data = new JObject();
+            data["EntityID"] = entityID;
+            data["Code"] = token;
+            data["Action"] = "remove";
+            data["Return"] = "JSON";
+
+            return Post("/profile", data);
+        }
+
+        public Task<HttpResponseMessage> SaveToken(string entityID, string tsData)
+        {
+            var data = new JObject();
+            data["Type"] = "enrollment";
+            data["Return"] = "value";
+
+            return Get("/token" + entityID, data)
+            .ContinueWith((response) =>
+            {
+                var postData = new JObject();
+                postData["EntityID"] = entityID;
+                postData["Token"] = response.Result.Content.ToString();
+                postData["ReturnToken"] = "True";
+                postData["ReturnValidation"] = tsData;
+                postData["Type"] = "enrollment";
+                postData["Return"] = "JSON";
+
+                return Post("/token", postData);
+            }).Unwrap();
+        }
+
+        public Task<HttpResponseMessage> SaveProfile(string entityID, string tsData, string code)
+        {
+            var data = new JObject();
+            data["EntityID"] = entityID;
+            data["tsData"] = tsData;
+            data["Return"] = "JSON";
+            data["Action"] = "v2";
+            data["Statistics"] = "extended";
+
+            if (code != "")
+                data["Code"] = code;
+
+            return Post("/profile", data);
+        }
+
+        public Task<HttpResponseMessage> GetProfileInfo(string entityID)
+        {
+            var data = new JObject();
+            string path = "/profile/" + entityID;
+            return Get(path, data);
         }
     }
 }
