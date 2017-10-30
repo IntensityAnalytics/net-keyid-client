@@ -98,7 +98,7 @@ namespace net_keyid_client
             return Post("/evaluate", data);
         }
 
-        public Task<HttpResponseMessage> Nonce(ulong nonceTime)
+        public Task<HttpResponseMessage> Nonce(long nonceTime)
         {
             var data = new JObject();
             data["type"] = "nonce";
