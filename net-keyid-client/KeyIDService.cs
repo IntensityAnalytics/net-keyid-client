@@ -72,7 +72,7 @@ namespace net_keyid_client
             return client.GetAsync(request.Uri);
         }
 
-        public Task<HttpResponseMessage> TypingMistake(string entityID, string mistype, string sessionID, string source, string action, string tmplate, string page)
+        public Task<HttpResponseMessage> TypingMistake(string entityID, string mistype = "", string sessionID = "", string source = "", string action = "", string tmplate = "", string page = "")
         {
             var data = new JObject();
             data["EntityID"] = entityID;
@@ -159,7 +159,7 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
-        public Task<HttpResponseMessage> SaveProfile(string entityID, string tsData, string code)
+        public Task<HttpResponseMessage> SaveProfile(string entityID, string tsData, string code = "")
         {
             var data = new JObject();
             data["EntityID"] = entityID;
