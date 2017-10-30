@@ -14,15 +14,12 @@ namespace net_keyid_client_tests
             var jo = JObject.Parse("{\"key1\":\"value1\"}");
             jo = JObject.Parse("{}");
 
-            service.Get("/profile", ref jo).ContinueWith((response) =>
+            service.Get("/profile", jo).ContinueWith((response) =>
             {
 
                 string body = response.Result.Content.ToString();
                 Console.WriteLine(body);
             }).Wait();
-
-            //service.Get("/profile", ref jo).Wait();
-            service.blah().Wait();
         }
     }
 }
