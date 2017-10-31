@@ -118,6 +118,54 @@ namespace net_keyid_client
             });
         }
 
+        Task<JObject> LoginPassiveEnrollment(string entityID, string tsData, string sessionID)
+        {
+            return EvaluateProfile(entityID, tsData, sessionID)
+            .ContinueWith((data) =>
+            {
+                // in base case that no profile exists save profile async and return earl
+                if (data.Result["Match"].ToString() == "EntityID does not exist." ||
+                    data.Result["Error"].ToString() == "The profile has too little data for a valid evaluation." ||
+                    data.Result["Error"].ToString() == "The entry varied so much from the model, no evaluation is possible.")
+                {
+                    return SaveProfile(entityID, tsData, sessionID)
+                    .ContinueWith((saveData) =>
+                    {
+                        var evalData = data.Result;
+                        evalData["Match"] = true;
+                        evalData["IsReady"] = false;
+                        evalData["Confidence"] = 100.0;
+                        evalData["Fidelity"] = 100.0;
+                        return evalData;
+                    });
+                }
+
+                // if profile is not ready save profile async and return early
+                if (data.Result["Error"].ToString() == "" && data.Result.Value<bool>("IsReady") == false)
+                {
+                    return SaveProfile(entityID, tsData, sessionID)
+                    .ContinueWith((saveData) =>
+                    {
+                        var evalData = data.Result;
+                        evalData["Match"] = true;
+                        return evalData;
+                    });
+                }
+
+                return Task.FromResult(data.Result);
+            }).Unwrap();
+        }
+
+        Task<JObject> GetProfileInfo(string entityID)
+        {
+            return service.GetProfileInfo(entityID)
+            .ContinueWith((response) =>
+            {
+                var data = ParseResponse(response.Result);
+                return Task.FromResult(data);
+            }).Unwrap();
+        }
+
         bool EvalThreshold(double confidence, double fidelity)
         {
             if (confidence >= settings.thresholdConfidence &&
