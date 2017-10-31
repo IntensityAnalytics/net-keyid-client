@@ -30,7 +30,7 @@ namespace net_keyid_client
 
             foreach (var jsonTuple in data)
             {
-                string encodedData = WebUtility.UrlDecode(jsonTuple.Value.ToString());
+                string encodedData = WebUtility.UrlEncode(jsonTuple.Value.ToString());
                 objEncoded[jsonTuple.Key.ToString()] = encodedData;
             }
 
@@ -112,12 +112,13 @@ namespace net_keyid_client
             data["Type"] = "remove";
             data["Return"] = "value";
 
-            return Get("/token" + entityID, data)
+            return Get("/token/" + entityID, data)
             .ContinueWith((response) => 
             {
+              
                 var postData = new JObject();
                 postData["EntityID"] = entityID;
-                postData["Token"] = response.Result.Content.ToString();
+                postData["Token"] = response.Result.Content.ReadAsStringAsync().Result;
                 postData["ReturnToken"] = "True";
                 postData["ReturnValidation"] = tsData;
                 postData["Type"] = "remove";
@@ -149,7 +150,7 @@ namespace net_keyid_client
             {
                 var postData = new JObject();
                 postData["EntityID"] = entityID;
-                postData["Token"] = response.Result.Content.ToString();
+                postData["Token"] = response.Result.Content.ReadAsStringAsync().Result;
                 postData["ReturnToken"] = "True";
                 postData["ReturnValidation"] = tsData;
                 postData["Type"] = "enrollment";

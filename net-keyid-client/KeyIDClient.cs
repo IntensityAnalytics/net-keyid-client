@@ -25,13 +25,13 @@ namespace net_keyid_client
             this.service = new KeyIDService(settings.url, settings.license, settings.timeout);
         }
 
-        Task<JObject> SaveProfile(string entityID, string tsData, string sessionID)
+        public Task<JObject> SaveProfile(string entityID, string tsData, string sessionID = "")
         {
             // try to save profile without a toke
             return service.SaveProfile(entityID, tsData)
             .ContinueWith((response) =>
             {
-                var data = new JObject();
+                var data = ParseResponse(response.Result);
 
                 // token is required
                 if (data["Error"].ToString() == "New enrollment code required.")
@@ -56,7 +56,7 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
-        Task<JObject> RemoveProfile(string entityID, string tsData, string sessionID)
+        public Task<JObject> RemoveProfile(string entityID, string tsData = "", string sessionID = "")
         {
             // get a removal token
             return service.RemoveToken(entityID, tsData)
@@ -79,7 +79,7 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
-        Task<JObject> EvaluateProfile(string entityID, string tsData, string sessionID)
+        public Task<JObject> EvaluateProfile(string entityID, string tsData, string sessionID = "")
         {
             long nonceTime = DateTime.Now.Ticks;
 
@@ -118,7 +118,7 @@ namespace net_keyid_client
             });
         }
 
-        Task<JObject> LoginPassiveEnrollment(string entityID, string tsData, string sessionID)
+        public Task<JObject> LoginPassiveEnrollment(string entityID, string tsData, string sessionID = "")
         {
             return EvaluateProfile(entityID, tsData, sessionID)
             .ContinueWith((data) =>
@@ -156,7 +156,7 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
-        Task<JObject> GetProfileInfo(string entityID)
+        public Task<JObject> GetProfileInfo(string entityID)
         {
             return service.GetProfileInfo(entityID)
             .ContinueWith((response) =>
@@ -193,7 +193,9 @@ namespace net_keyid_client
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return JObject.Parse(response.Content.ToString());
+                string content = response.Content.ReadAsStringAsync().Result;
+                var obj = JObject.Parse(content);
+                return obj;
             }
             else
             {
