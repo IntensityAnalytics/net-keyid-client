@@ -124,7 +124,7 @@ namespace net_keyid_client
             .ContinueWith((data) =>
             {
                 // in base case that no profile exists save profile async and return earl
-                if (data.Result["Match"].ToString() == "EntityID does not exist." ||
+                if (data.Result["Error"].ToString() == "EntityID does not exist." ||
                     data.Result["Error"].ToString() == "The profile has too little data for a valid evaluation." ||
                     data.Result["Error"].ToString() == "The entry varied so much from the model, no evaluation is possible.")
                 {
