@@ -161,7 +161,7 @@ namespace net_keyid_client
             return service.GetProfileInfo(entityID)
             .ContinueWith((response) =>
             {
-                var data = ParseResponse(response.Result);
+                var data = ParseGetProfileResponse(response.Result);
                 return Task.FromResult(data);
             }).Unwrap();
         }
@@ -196,6 +196,20 @@ namespace net_keyid_client
                 string content = response.Content.ReadAsStringAsync().Result;
                 var obj = JObject.Parse(content);
                 return obj;
+            }
+            else
+            {
+                throw new HttpRequestException("HTTP response not 200 OK.");
+            }
+        }
+
+        JObject ParseGetProfileResponse(HttpResponseMessage response)
+        {
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string content = response.Content.ReadAsStringAsync().Result;
+                var obj = JArray.Parse(content);
+                return (JObject)obj[0];
             }
             else
             {
