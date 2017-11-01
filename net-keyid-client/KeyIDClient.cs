@@ -14,6 +14,10 @@ namespace net_keyid_client
         public KeyIDSettings settings { get; set; }
         private KeyIDService service;
 
+        /// <summary>
+        /// KeyID services client.
+        /// </summary>
+        /// <param name="settings"> KeyID settings struct</param>
         public KeyIDClient(KeyIDSettings settings)
         {
             this.settings = settings;
@@ -25,6 +29,13 @@ namespace net_keyid_client
             this.service = new KeyIDService(settings.url, settings.license, settings.timeout);
         }
 
+        /// <summary>
+        /// Saves a given KeyID profile entry.
+        /// </summary>
+        /// <param name="entityID">Profile name to save.</param>
+        /// <param name="tsData">Typing sample data to save.</param>
+        /// <param name="sessionID">Session identifier for logging purposes.</param>
+        /// <returns>JSON value (task)</returns>
         public Task<JObject> SaveProfile(string entityID, string tsData, string sessionID = "")
         {
             // try to save profile without a toke
@@ -56,6 +67,13 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
+        /// <summary>
+        /// Removes a KeyID profile.
+        /// </summary>
+        /// <param name="entityID">Profile name to remove.</param>
+        /// <param name="tsData">Optional typing sample for removal authorization.</param>
+        /// <param name="sessionID">Session identifier for logging purposes.</param>
+        /// <returns>JSON value (task)</returns
         public Task<JObject> RemoveProfile(string entityID, string tsData = "", string sessionID = "")
         {
             // get a removal token
@@ -79,6 +97,13 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
+        /// <summary>
+        /// Evaluates a KeyID profile.
+        /// </summary>
+        /// <param name="entityID">Profile name to evaluate.</param>
+        /// <param name="tsData">Typing sample to evaluate against profile.</param>
+        /// <param name="sessionID">Session identifier for logging purposes.</param>
+        /// <returns></returns
         public Task<JObject> EvaluateProfile(string entityID, string tsData, string sessionID = "")
         {
             long nonceTime = DateTime.Now.Ticks;
@@ -118,6 +143,13 @@ namespace net_keyid_client
             });
         }
 
+        /// <summary>
+        /// Evaluates a given profile and adds typing sample to profile.
+        /// </summary>
+        /// <param name="entityID">Profile to evaluate.</param>
+        /// <param name="tsData">Typing sample to evaluate and save.</param>
+        /// <param name="sessionID">Session identifier for logging purposes.</param>
+        /// <returns></returns
         public Task<JObject> LoginPassiveEnrollment(string entityID, string tsData, string sessionID = "")
         {
             return EvaluateProfile(entityID, tsData, sessionID)
@@ -156,6 +188,11 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
+        /// <summary>
+        /// Returns profile information without modifying the profile.
+        /// </summary>
+        /// <param name="entityID">Profile to inspect.</param>
+        /// <returns></returns
         public Task<JObject> GetProfileInfo(string entityID)
         {
             return service.GetProfileInfo(entityID)
@@ -166,6 +203,12 @@ namespace net_keyid_client
             }).Unwrap();
         }
 
+        /// <summary>
+        /// Compares a given confidence and fidelity against pre-determined thresholds.
+        /// </summary>
+        /// <param name="confidence">KeyID evaluation confidence.</param>
+        /// <param name="fidelity">KeyID evaluation fidelity.</param>
+        /// <returns>Whether confidence and fidelity meet thresholds.</returns>
         bool EvalThreshold(double confidence, double fidelity)
         {
             if (confidence >= settings.thresholdConfidence &&
@@ -179,6 +222,11 @@ namespace net_keyid_client
             }
         }
 
+        /// <summary>
+        /// Converts a string value like 'true' to a boolean object.
+        /// </summary>
+        /// <param name="input">String to convert to boolean.</param>
+        /// <returns>Boolean value.</returns
         bool AlphaToBool(string input)
         {
             input = input.ToUpper();
@@ -189,6 +237,11 @@ namespace net_keyid_client
                 return false;
         }
 
+        /// <summary>
+        /// Extracts a JSON value from a http_response
+        /// </summary>
+        /// <param name="response">HTTP response</param>
+        /// <returns>JSON value</returns
         JObject ParseResponse(HttpResponseMessage response)
         {
             if (response.StatusCode == HttpStatusCode.OK)
@@ -203,6 +256,11 @@ namespace net_keyid_client
             }
         }
 
+        /// <summary>
+        /// Extracts a JSON value from a http_response
+        /// </summary>
+        /// <param name="response">HTTP response</param>
+        /// <returns>JSON value</returns>
         JObject ParseGetProfileResponse(HttpResponseMessage response)
         {
             if (response.StatusCode == HttpStatusCode.OK)
