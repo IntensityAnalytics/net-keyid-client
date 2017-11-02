@@ -266,8 +266,12 @@ namespace net_keyid_client
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 string content = response.Content.ReadAsStringAsync().Result;
-                var obj = JArray.Parse(content);
-                return (JObject)obj[0];
+                var obj = JToken.Parse(content);
+
+                if (obj.Type == JTokenType.Array)
+                    return (JObject)obj[0];
+                return
+                    (JObject)obj;
             }
             else
             {
