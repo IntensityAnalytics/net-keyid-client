@@ -208,8 +208,8 @@ namespace net_keyid_client
             var data = new JObject();
             data["Type"] = "enrollment";
             data["Return"] = "value";
-
-            return Get("/token" + entityID, data)
+            
+            return Get("/token/" + entityID, data)
             .ContinueWith((response) =>
             {
                 var postData = new JObject();
