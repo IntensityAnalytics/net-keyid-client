@@ -8,26 +8,20 @@ Include dll and reference in your project as any other .NET library.
 
 ## Usage
 
-The keyid-client library provides several asynchronous functions that return TPL tasks.
+The keyid client library provides several asynchronous functions that return TPL tasks.
 
 ```cs
 using System;
 using Xunit;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using net_keyid_client;
+using IntensityAnalytics.KeyID; 
 
 void main(){
 	var settings = new KeyIDSettings
     {
         license = "yourlicense",
-        url = "http://yourkeyidserver",
-        passiveEnrollment = false,
-        passiveValidation = false,
-        customThreshold = false,
-        thresholdConfidence = 70.0,
-        thresholdFidelity = 50.0,
-        timeout = 1000
+        url = "http://yourkeyidserver"      
     };
 
     string username = "someuser";

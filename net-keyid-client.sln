@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "net-keyid-client", "net-keyid-client\net-keyid-client.csproj", "{FEE98930-A083-47E5-AEAE-2D83C9454166}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7F2FE614-A56F-4F55-8155-28C545D42414}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tests", "tests\tests.csproj", "{6897A6F1-2399-46A3-BF39-32AF0EA0CA3D}"
 EndProject
