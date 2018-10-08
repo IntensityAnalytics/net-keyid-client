@@ -20,4 +20,10 @@
     <ProjectReference Include="..\net-keyid-client\net-keyid-client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="license.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
