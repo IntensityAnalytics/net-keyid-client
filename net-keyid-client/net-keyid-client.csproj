@@ -6,6 +6,17 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.4.0</Version>
+    <Company>Intensity Analytics Corporation</Company>
+    <PackageId>IntensityAnalytics.KeyID.Client</PackageId>
+    <Authors>Jonathan Galentine</Authors>
+    <Product>IntensityAnalytics.KeyID.Client</Product>
+    <Description>A .NET standard 2.0 library to allow you to peform second factor authentication using Intensity Analytics TickStream.KeyID. Compatible with .NET core and .NET framework.</Description>
+    <Copyright />
+    <RepositoryUrl>https://github.com/IntensityAnalytics/net-keyid-client</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/IntensityAnalytics/net-keyid-client</PackageProjectUrl>
+    <PackageTags>KeyID UEBA</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
