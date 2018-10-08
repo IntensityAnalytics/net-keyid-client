@@ -33,7 +33,7 @@ namespace net_keyid_client_tests
         {
             client.GetProfileInfo(entityID).Wait();
             client.RemoveProfile(entityID).Wait();
-
+            client.settings.loginEnrollment = true;
             client.Login(entityID, "hZI7bsQwDETPkhtwKP5Ub7sIUu4BcoA06XT40KlMUcDChquHeeaQzsuGjZggHzIiRKeu7/V4rs/nev0/X48PkFRuirGtn53zEiceM0Drd8dsFmx6vvNkxYlr1hqn6qbG3ep2xwxBqnKyRuEYlOxh1hrn0ElvrW5wzbR3Vs88ZJtvrMECy910a6lkklBu42AFKueUSztYa5yLu2u3yh1TooFh1K07JkAcjkmpYAExRU/bMRY/nabeJ1VcSj3c3I6NsHlK44IpC6e0p22YyjDvabUQXIsd6PXWSRHC+T1gZQTO2q6ddqz8W7Y2CB37Aw==").Wait();
             client.Login(entityID, "hZO5bcRADEVrcQe8j3jTheFwC3ABTjab4pdwJM4QEARlD/+R1JfTMjaORHABVRRxWL/r8Vzfz/X6f34eXwjSORKGWH875y3OGNVV1nvHLDuWYJ6TFSfusPY4x6DkwerWMHOCedfoXBCADbu2uBBLjbizZg1HTLfWJCRKurNmcIr5YL2epLIxsE5yWhE7x4Gpg7XFoaA552mVjrkJOp/WHYsA9lOqcMWIOb1mO9J2TOooQzW1bUruSDp8/R1L5LrRmXYteiHhSlNax6pwKkOB+0GYtMo5FLhvykJY9RywtgLXqzGltdnq9zIKPLAP").Wait();
             client.Login(entityID, "hZK7bcRADERrcQcc/hlfejAcugAX4MTZFu+1o+OKgKBAycM8DUfBy8UlCxTqABmXrK/1eK735/r8fz4ebyCduO+Tix5XhUCsnxPzesUYHmw5WdG5CE69Wo+4dAmqqzX8FRMxCvhkzc75fk1de1xlmdxaNVlRcWvVgirXndUUpsWDtZ3E9xYx7gp0LpEZg7XFBbGq09WqHdtFSfRqPTCmIBsObNQwy73/0OHECqk5pLWmya4hGNIOLNR4OIi1Hz3N937DqieWgA6j9oNk0Kbyet7eNEv+2g5Yq1C7KUgGrH1bGfavZBfsFw==").Wait();
@@ -44,8 +44,9 @@ namespace net_keyid_client_tests
             client.EvaluateProfile(entityID, "hZK7bcRADERrcQcc/hlfejAcugAX4MTZFu+1o+OKgKBAycM8DUfBy8UlCxTqABmXrK/1eK735/r8fz4ebyCduO+Tix5XhUCsnxPzesUYHmw5WdG5CE69Wo+4dAmqqzX8FRMxCvhkzc75fk1de1xlmdxaNVlRcWvVgirXndUUpsWDtZ3E9xYx7gp0LpEZg7XFBbGq09WqHdtFSfRqPTCmIBsObNQwy73/0OHECqk5pLWmya4hGNIOLNR4OIi1Hz3N937DqieWgA6j9oNk0Kbyet7eNEv+2g5Yq1C7KUgGrH1bGfavZBfsFw==")
             .ContinueWith((data) =>
             {
-                Assert.True(data.Result["Confidence"].Value<int>() == 98);
-                Assert.True(data.Result["Fidelity"].Value<int>() == 96);               
+                client.settings.loginEnrollment = false;
+                Assert.True(data.Result["Confidence"].Value<double>() == 98);
+                Assert.True(data.Result["Fidelity"].Value<double>() == 96);               
             })
 			.Wait();
         }
@@ -97,8 +98,8 @@ namespace net_keyid_client_tests
             {
                 client.settings.loginEnrollment = false;
                 Assert.True(data.Result["Error"].ToString() == "Error saving profile.");
-                Assert.True(data.Result["Confidence"].Value<int>() == 0);
-                Assert.True(data.Result["Fidelity"].Value<int>() == 0);
+                Assert.True(data.Result["Confidence"].Value<double>() == 0);
+                Assert.True(data.Result["Fidelity"].Value<double>() == 0);
                 Assert.True(data.Result["Match"].Value<bool>() == false);
             })
             .Wait();
@@ -129,8 +130,8 @@ namespace net_keyid_client_tests
             .ContinueWith((data) =>
             {
                 client.settings.loginEnrollment = false;
-                Assert.True(data.Result["Confidence"].Value<int>() == 98);
-                Assert.True(data.Result["Fidelity"].Value<int>() == 72);
+                Assert.True(data.Result["Confidence"].Value<double>() == 98);
+                Assert.True(data.Result["Fidelity"].Value<double>() == 72);
                 Assert.True(data.Result["Profiles"].Value<int>() == 15);
             }).Wait();
         }
