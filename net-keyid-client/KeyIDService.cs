@@ -30,6 +30,7 @@ namespace IntensityAnalytics
                 this.url = new UriBuilder(url);
                 this.license = license;
                 client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", license); 
             }
 
             /// <summary>
@@ -58,7 +59,7 @@ namespace IntensityAnalytics
             /// <returns>REST request and response.</returns>
             public Task<HttpResponseMessage> Post(string path, JObject data)
             {
-                data["License"] = license;
+                //data["License"] = license;
                 var dataEncoded = encodeJSONProperties(data);
                 string dataEncodedJSON = dataEncoded.ToString(Formatting.None);
 
@@ -66,7 +67,7 @@ namespace IntensityAnalytics
                 request.Path = path;
 
                 var content = new StringContent("=[" + dataEncodedJSON + "]", Encoding.UTF8, "application/x-www-form-urlencoded");
-
+                
                 return client.PostAsync(request.Uri, content);
             }
 
@@ -258,6 +259,16 @@ namespace IntensityAnalytics
                 var data = new JObject();
                 string path = "/profile/" + entityID;
                 return Get(path, data);
+            }
+
+            public Task<HttpResponseMessage> Monitor(string entityID, string tsData, string entityNotes = "")
+            {
+                var data = new JObject();
+                data["EntityID"] = entityID;
+                data["tsData"] = tsData;
+                data["entityNotes"] = entityNotes;
+
+                return Post("/monitor", data);
             }
         }
     }

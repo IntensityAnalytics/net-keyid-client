@@ -17,7 +17,7 @@ namespace net_keyid_client_tests
             settings = new KeyIDSettings
             {
                 license = System.IO.File.ReadAllLines("license.txt")[0],
-                url = "http://keyidservicesvm.tickstream.com",
+                url = "http://keyidservices.tickstream.com",
                 loginEnrollment = false,
                 customThreshold = false,
                 thresholdConfidence = 70.0,
@@ -133,6 +133,16 @@ namespace net_keyid_client_tests
                 Assert.True(data.Result["Confidence"].Value<double>() == 98);
                 Assert.True(data.Result["Fidelity"].Value<double>() == 72);
                 Assert.True(data.Result["Profiles"].Value<int>() == 15);
+            }).Wait();
+        }
+
+        [Fact]
+        public void Monitor()
+        {            
+            client.Monitor(entityID, "monitor test", "monitor notes")
+            .ContinueWith((data) =>
+            {
+                Assert.True(data.Result["Error"].ToString() == "");
             }).Wait();
         }
     }

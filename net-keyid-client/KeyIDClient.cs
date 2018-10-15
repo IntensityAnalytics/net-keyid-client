@@ -252,13 +252,30 @@ namespace IntensityAnalytics
             /// Returns profile information without modifying the profile.
             /// </summary>
             /// <param name="entityID">Profile to inspect.</param>
-            /// <returns></returns
+            /// <returns></returns>
             public Task<JObject> GetProfileInfo(string entityID)
             {
                 return service.GetProfileInfo(entityID)
                 .ContinueWith((response) =>
                 {
                     var data = ParseGetProfileResponse(response.Result);
+                    return Task.FromResult(data);
+                }).Unwrap();
+            }
+
+            /// <summary>
+            /// Store profile measurements without returning an evaluation result.
+            /// </summary>
+            /// <param name="entityID">Profile to inspect.</param>
+            /// <param name="tsData">Typing sample to save.</param>
+            /// <param name="entityNotes">Additional notes/context to save.</param>
+            /// <returns></returns>
+            public Task<JObject> Monitor(string entityID, string tsData, string entityNotes = "")
+            {
+                return service.Monitor(entityID, tsData, entityNotes)
+                .ContinueWith((response) =>
+                {
+                    var data = ParseResponse(response.Result);
                     return Task.FromResult(data);
                 }).Unwrap();
             }
