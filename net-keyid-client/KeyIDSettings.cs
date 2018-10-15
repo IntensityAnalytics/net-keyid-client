@@ -14,8 +14,7 @@ namespace IntensityAnalytics
             public bool customThreshold { get; set; } = false;
             public double thresholdConfidence { get; set; } = 70.0;
             public double thresholdFidelity { get; set; } = 50.0;
-            public int timeout { get; set; } = 0;
-            public bool strictSSL { get; set; } = true;
+            public int timeout { get; set; } = 100000;
         }
     }
 }

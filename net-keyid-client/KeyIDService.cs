@@ -25,11 +25,12 @@ namespace IntensityAnalytics
             /// <param name="url">KeyID services URL.</param>
             /// <param name="license">KeyID services license key.</param>
             /// <param name="timeoutMs">REST web service timeout.</param>
-            public KeyIDService(string url, string license, int timeoutMs = 1000)
+            public KeyIDService(string url, string license, int timeoutMs = 100000)
             {
                 this.url = new UriBuilder(url);
                 this.license = license;
                 client = new HttpClient();
+                client.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", license); 
             }
 
