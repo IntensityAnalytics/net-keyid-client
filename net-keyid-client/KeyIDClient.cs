@@ -108,12 +108,12 @@ namespace IntensityAnalytics
             /// <returns></returns
             public Task<JObject> EvaluateProfile(string entityID, string tsData, string sessionID = "")
             {
-                long nonceTime = DateTime.Now.Ticks;
+                long nonceTime = DateTime.UtcNow.Ticks;
 
                 return service.Nonce(nonceTime)
                 .ContinueWith((response) =>
                 {
-                    return service.EvaluateSample(entityID, tsData, response.Result.ToString());
+                    return service.EvaluateSample(entityID, tsData, response.Result.Content.ReadAsStringAsync().Result);
                 }).Unwrap()
                 .ContinueWith((response) =>
                 {
